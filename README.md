@@ -1,2 +1,2 @@
-# docker-emacs-elpy
-Dockerized Emacs with Elpy
+Dockerized Emacs with `Elpy <https://github.com/jorgenschaefer/elpy>`_.
+
