@@ -17,8 +17,17 @@ RUN pip install --no-cache \
     yapf
 
 # Install Elpy
-COPY install.el /root/
+COPY install.el .emacs /root/
 RUN emacs --batch -l /root/install.el \
     && rm /root/install.el
 
-COPY .emacs /root/.emacs
+ONBUILD ARG uid=1000
+ONBUILD ARG gid=1000
+ONBUILD RUN groupadd -g $gid user \
+	&& useradd -u $uid -g $gid -d /home/user -m -s /bin/bash user \
+	&& cp /root/.emacs /home/user \
+	&& cp -r /root/.emacs.d /home/user \
+	&& chown -R $uid:$gid /home/user
+ONBUILD USER user
+
+
