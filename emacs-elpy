@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-xhost +local:docker
-
 if [ $1 == '--root' ]; then
     shift
     image=mbodenhamer/emacs-elpy
@@ -17,5 +15,6 @@ else
     fi
 fi
 
+xhost +local:docker
 docker run --rm -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY \
     -v $(pwd):/files ${image} "$@"
