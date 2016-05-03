@@ -1,0 +1,5 @@
+#!/bin/bash
+
+xhost +local:docker
+docker run --rm -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY \
+    -v $(pwd):/files mbodenhamer/emacs-elpy "$@" &> /dev/null &
