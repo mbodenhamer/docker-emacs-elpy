@@ -1,5 +1,21 @@
 #!/bin/bash
+set -e
 
 xhost +local:docker
+
+if [ $1 == '--root' ]; then
+    shift
+    image=mbodenhamer/emacs-elpy
+else
+    image=emacs-elpy-$(id -u)-$(id -g)
+    if [ -z "$(docker images | grep ${image})" ]; then
+	tmpdir=$(mktemp -d)
+	echo "FROM mbodenhamer/emacs-elpy:onbuild" > ${tmpdir}/Dockerfile
+	docker build -t ${image}:latest --build-arg uid=$(id -u) \
+	    --build-arg gid=$(id -g) $tmpdir
+	rm -rf $tmpdir
+    fi
+fi
+
 docker run --rm -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY \
-    -v $(pwd):/files mbodenhamer/emacs-elpy "$@" &> /dev/null &
+    -v $(pwd):/files ${image} "$@"
