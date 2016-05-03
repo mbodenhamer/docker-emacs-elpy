@@ -17,8 +17,6 @@ RUN pip install --no-cache \
     yapf
 
 # Install Elpy
-COPY install.el /root/
+COPY install.el .emacs /root/
 RUN emacs --batch -l /root/install.el \
     && rm /root/install.el
-
-COPY .emacs /root/.emacs
