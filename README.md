@@ -16,8 +16,8 @@ The application can then be invoked like so:
     
 This will build an image that launches emacs with the UID and GID of the current user (if the command has been previously invoked as the current user, a new image will not be built) and gives the container access to the file tree starting at the current working directory.
 
-If you wish to invoke emacs as root, you can supply the `--root` option:
+If you wish to invoke emacs using some other UID and GID, supply the `--uid` and `--gid` options like so:
 
-    $ emacs-elpy --root [emacs options] some_file.py
+    $ emacs-elpy --uid some_uid --gid some_gid [emacs options] some_file.py
 
 Information on creating a container directly using `docker run` can be found in the [mbodenhamer/emacs](https://github.com/mbodenhamer/docker-emacs) documentation.
