@@ -1,3 +1,5 @@
+[![](https://travis-ci.org/mbodenhamer/docker-emacs-elpy.svg?branch=master)](https://travis-ci.org/mbodenhamer/docker-emacs-elpy)
+
 Dockerized Emacs with [Elpy](https://github.com/jorgenschaefer/elpy).
 
 ## Usage
@@ -18,4 +20,4 @@ If you wish to invoke emacs as root, you can supply the `--root` option:
 
     $ emacs-elpy --root [emacs options] some_file.py
 
-More information on creating a container directly using `docker run` can be inferred by studying the [emacs-elpy shell script](https://github.com/mbodenhamer/docker-emacs-elpy/blob/master/emacs-elpy).
+Information on creating a container directly using `docker run` can be found in the [mbodenhamer/emacs](https://github.com/mbodenhamer/docker-emacs) documentation.
