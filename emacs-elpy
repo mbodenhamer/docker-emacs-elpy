@@ -1,20 +1,44 @@
 #!/bin/bash
 set -e
 
-if [ $1 == '--root' ]; then
+uid=$(id -u)
+gid=$(id -g)
+shifts=0
+
+function set_ids {
+    if [[ "$1" == "--uid" || "$1" == "--gid" ]]; then
+	if [[ "$1" == "--uid" ]]; then
+	    uid="$2"
+	    shifts=$(($shifts + 2))
+	    shift; shift
+	    set_ids "$@"
+	    return
+	fi
+	if [[ "$1" == "--gid" ]]; then
+	    gid="$2"
+	    shifts=$(($shifts + 2))
+	    shift; shift
+	    set_ids "$@"
+	fi
+    fi   
+}
+set_ids "$@"
+
+for i in $(seq 1 $shifts); do
     shift
-    image=mbodenhamer/emacs-elpy
-else
-    image=emacs-elpy-$(id -u)-$(id -g)
-    if [ -z "$(docker images | grep ${image})" ]; then
-	tmpdir=$(mktemp -d)
-	echo "FROM mbodenhamer/emacs-elpy:onbuild" > ${tmpdir}/Dockerfile
-	docker build -t ${image}:latest --build-arg uid=$(id -u) \
-	    --build-arg gid=$(id -g) $tmpdir
-	rm -rf $tmpdir
-    fi
+done
+
+image=emacs-elpy-${uid}-${gid}
+if [ -z "$(docker images | grep ${image})" ]; then
+    tmpdir=$(mktemp -d)
+    echo "FROM mbodenhamer/emacs-elpy:latest" > ${tmpdir}/Dockerfile
+    docker build -t ${image}:latest --build-arg uid=$uid \
+	--build-arg gid=$gid $tmpdir
+    rm -rf $tmpdir
 fi
 
-xhost +local:docker
+if [[ -n $(which xhost) ]]; then
+    xhost +local:docker
+fi
 docker run --rm -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY \
     -v $(pwd):/files ${image} "$@"
