@@ -18,6 +18,9 @@ shell:
 .PHONY: build shell
 #-------------------------------------------------------------------------------
 
+test-shell:
+	$(TEST) bash
+
 quick-test:
 	$(TEST) bats tests
 
@@ -25,7 +28,7 @@ test:
 	$(MAKE) build
 	$(MAKE) quick-test
 
-.PHONY: quick-test test
+.PHONY: test-shell quick-test test
 #-------------------------------------------------------------------------------
 
 install:
